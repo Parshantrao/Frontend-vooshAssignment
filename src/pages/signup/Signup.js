@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router';
@@ -7,7 +7,7 @@ import GoogleLogin from '../../components/googleLogin/GoogleLogin';
 
 function Signup() {
 
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+  const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
 
   const formData = {
     first_name: "",
@@ -21,8 +21,8 @@ function Signup() {
 
   const [signupBtnClicked, setSignupBtnClicked] = useState(false)
 
-  const { setUserEmail,isUserLoggedIn } = useContext(stateContext)
-  
+  const { setUserEmail, isUserLoggedIn } = useContext(stateContext)
+
   const navigate = useNavigate()
 
   const handleEmailChange = (e) => {
@@ -60,7 +60,7 @@ function Signup() {
     })
 
     let jsonData = await fetchedData.json()
-    
+
     if (!jsonData.status) {
       window.alert(jsonData.message)
     }
@@ -80,14 +80,14 @@ function Signup() {
       navigate('/dashboard');
     }
 
-  }, [isUserLoggedIn,navigate])
+  }, [isUserLoggedIn, navigate])
 
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 50px)' }}>
       <div style={{}}>
         <h1 style={{ color: 'blue', fontWeight: '700' }}>Signup</h1>
-        <div style={{ borderRadius: '8px',boxShadow:'0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }} className='px-4 py-3'>
+        <div style={{ borderRadius: '8px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }} className='px-4 py-3'>
           <Form onSubmit={handleSubmit} >
             <Form.Group className="mb-3" controlId="formBasicFirstName">
               <Form.Control required value={signupFormData.first_name} onChange={(e) => {
@@ -129,7 +129,7 @@ function Signup() {
                 navigate("/login")
               }} style={{ textDecoration: 'none', cursor: 'pointer', color: 'blue' }}>Login</span> </span>
             </div>
-           <GoogleLogin btnText="Signup with" />
+            <GoogleLogin btnText="Signup with" />
           </Form>
         </div>
       </div>
