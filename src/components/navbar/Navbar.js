@@ -16,7 +16,21 @@ function Navbar() {
 
   const handleLogoutBtnClick = async ()=>{
      
-  
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_DEPLOYED_URL_PRODUCTION}/logout`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+
+    if (response.ok) {
+      navigate('/login');
+      setIsUserLoggedIn(false)
+    } else {
+      console.error('Logout failed:', response.statusText);
+    }
   }
 
   useEffect(() => {

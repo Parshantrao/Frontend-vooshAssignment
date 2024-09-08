@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { stateContext } from '../../contexts/Context';
 import Form from 'react-bootstrap/Form';
 import "./Style.css"
-
+import { fetchAllTasks } from '../../serverCalls/ServerCalls';
 
 function EditTaskModal() {
   const today = new Date().toISOString().split("T")[0];
@@ -60,7 +60,23 @@ function EditTaskModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  
+    let fetchedData = await fetch(`${process.env.REACT_APP_BACKEND_DEPLOYED_URL_PRODUCTION}/tasks/${cardDetails.id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...editTaskFormData }),
+    });
+    const data = await fetchedData.json();
+    window.alert(data.message);
+    (async function () {
+      let userTaks = await fetchAllTasks();
+
+      if (userTaks) {
+        setTasksData([...userTaks])
+      }
+    })()
     setIsDateChanged(false)
     setIsTitleChanged(false)
     setIsDescriptionChanged(false)

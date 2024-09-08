@@ -9,7 +9,7 @@ import AddTaskModal from '../../components/modals/AddTaskModal'
 import { useNavigate } from 'react-router'
 import DeleteTaskModal from '../../components/modals/deleteTaskModal'
 import { useDrop } from 'react-dnd'
-
+import { fetchAllTasks } from '../../serverCalls/ServerCalls'
 
 function Home() {
   const navigate = useNavigate()
@@ -23,6 +23,22 @@ function Home() {
   const [alertedTasks, setAlertedTasks] = useState([]); 
 
 
+  // fetch user data
+  useEffect(() => {
+    if (!isUserLoggedIn) {
+      navigate("/login")
+    }
+    else {
+      (async function () {
+        let userTaks = await fetchAllTasks();
+
+        if (userTaks) {
+          setTasksData([...userTaks])
+        }
+      })()
+    }
+
+  }, [isUserLoggedIn, navigate, setTasksData]);
 
   useEffect(() => {
     let data = [...tasksData];
@@ -87,7 +103,26 @@ function Home() {
   }));
 
   const changeTaskStatus = async (id, status) => {
-  
+    if (status) {
+      let fetchedData = await fetch(`${process.env.REACT_APP_BACKEND_DEPLOYED_URL_PRODUCTION}/tasks/status/${id}`, {
+        method: 'PUT',
+        credentials: 'include', headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          status: status
+        })
+      })
+      const data = await fetchedData.json();
+      window.alert(data.message);
+      (async function () {
+        let userTaks = await fetchAllTasks();
+
+        if (userTaks) {
+          setTasksData([...userTaks])
+        }
+      })()
+    }
   }
 
 

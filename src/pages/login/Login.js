@@ -28,7 +28,24 @@ function Login() {
     event.preventDefault();
     setLoginBtnClicked(true)
 
-   
+    let apiResponse = await fetch(`${process.env.REACT_APP_BACKEND_DEPLOYED_URL_PRODUCTION}/login`, {
+      method: 'POST',
+      credentials: 'include', headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...loginFormData })
+    })
+
+    let jsonData = await apiResponse.json()
+    if (!jsonData.status) {
+      window.alert(jsonData.message)
+    }
+    else {
+      setLoginFormData(formData)
+      setTimeout(() => {
+        navigate("/dashboard")
+      }, 700);
+    }
     setLoginBtnClicked(false)
   };
 

@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { stateContext } from "../../contexts/Context";
 import Form from "react-bootstrap/Form";
 import "./Style.css";
-
+import { fetchAllTasks } from "../../serverCalls/ServerCalls";
 
 function AddTaskModal() {
   const formData = {
@@ -37,7 +37,23 @@ function AddTaskModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
+    let fetchedData = await fetch(`${process.env.REACT_APP_BACKEND_DEPLOYED_URL_PRODUCTION}/tasks`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...newTaskFormData }),
+    });
+    const data = await fetchedData.json();
+    (async function () {
+      let userTaks = await fetchAllTasks();
+
+      if (userTaks) {
+        setTasksData([...userTaks])
+      }
+    })()
+    window.alert(data.message);
     setNewTaskFormData(formData)
     setAddModalShow(false)
   };

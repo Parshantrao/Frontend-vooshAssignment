@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-
+import { checkForTokenValidation } from "../serverCalls/ServerCalls";
 
 const { createContext, useState, useContext, useEffect } = require("react");
 
@@ -39,8 +39,18 @@ export const StateProvider = function ({ children }) {
     const tokenValidationCheck = async () => {
       try {
 
+        const isTokenValid = await checkForTokenValidation();
+
+        if (!isTokenValid) {
+          setIsUserLoggedIn(false);
+          // navigate('/login');
+        } else {
+          setIsUserLoggedIn(true);
+        }
       } catch (error) {
-       
+        console.error('Error validating token:', error);
+        setIsUserLoggedIn(false);
+        // navigate('/login');
       }
     };
 

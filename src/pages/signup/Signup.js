@@ -52,7 +52,25 @@ function Signup() {
     e.preventDefault();
     setUserEmail(signupFormData.email)
 
+    let fetchedData = await fetch(`${process.env.REACT_APP_BACKEND_DEPLOYED_URL_PRODUCTION}/users`, {
+      method: 'POST', headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...signupFormData })
+    })
+
+    let jsonData = await fetchedData.json()
     
+    if (!jsonData.status) {
+      window.alert(jsonData.message)
+    }
+    else {
+      window.alert(jsonData.message)
+      setSignupFormData(formData)
+      setTimeout(() => {
+        navigate("/login")
+      }, 700);
+    }
     setSignupBtnClicked(false)
   }
 
